@@ -1,10 +1,10 @@
 function configure_output()
-    gpio.mode(1, gpio.OUTPUT) -- 5 gpio pin
-    gpio.mode(2, gpio.OUTPUT) -- 4 gpio pin
-    gpio.mode(5, gpio.OUTPUT) -- 14 gpio pin
-    gpio.write(1, gpio.HIGH)  -- set lamp to off
-    gpio.write(2, gpio.HIGH)  -- set lamp to off
-    gpio.write(5, gpio.LOW)   -- set beeper to off
+    gpio.mode(1, gpio.OUTPUT)
+    gpio.mode(2, gpio.OUTPUT)
+    gpio.mode(5, gpio.OUTPUT)
+    gpio.write(1, gpio.HIGH)
+    gpio.write(2, gpio.HIGH)
+    gpio.write(5, gpio.LOW)
 end
 
 function is_daylight_saving(dtm)
