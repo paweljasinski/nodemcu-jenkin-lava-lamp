@@ -1,3 +1,23 @@
+function configure_output()
+    gpio.mode(1, gpio.OUTPUT) -- green
+    gpio.write(1, gpio.HIGH)  -- low active
+    gpio.mode(2, gpio.OUTPUT) -- red
+    gpio.write(2, gpio.HIGH)  -- low active
+    gpio.mode(5, gpio.OUTPUT) -- buzzer
+    gpio.write(5, gpio.LOW)   -- high active
+    gpio.mode(4, gpio.OUTPUT) -- on board led
+    gpio.write(4, gpio.HIGH)  -- low active
+end
+
+function blink()
+    local blink_timer = tmr.create()
+    gpio.write(4, 0)
+    blink_timer:alarm(25, tmr.ALARM_SINGLE, function()
+        gpio.write(4, 1)
+    end)
+end
+
+
 function setupWifi()
     print("Setting up wifi ")
     wifi.setmode(wifi.STATION)
@@ -8,7 +28,7 @@ function setupWifi()
     local verify_timer = tmr.create()
     verify_timer:alarm(1000, tmr.ALARM_AUTO, function(timer)
         if (wifi.sta.getip() == nil) then
-            print(".")
+            blink()
         else
             print("IP: "..wifi.sta.getip())
             timer:unregister()
@@ -24,5 +44,6 @@ function setupWifi()
 end
 
 dofile("config.lua")
+configure_output()
 setupWifi()
 dofile("lava.lua")

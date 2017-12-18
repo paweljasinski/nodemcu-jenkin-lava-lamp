@@ -1,12 +1,3 @@
-function configure_output()
-    gpio.mode(1, gpio.OUTPUT)
-    gpio.mode(2, gpio.OUTPUT)
-    gpio.mode(5, gpio.OUTPUT)
-    gpio.write(1, gpio.HIGH)
-    gpio.write(2, gpio.HIGH)
-    gpio.write(5, gpio.LOW)
-end
-
 function is_daylight_saving(dtm)
     if dtm["mon"] < 3 or dtm["mon"] > 10 then
         return false
@@ -30,7 +21,8 @@ function is_daylight_saving(dtm)
 end
 
 function is_office_time()
-    --do return true end
+    -- do return true end
+    if rtctime.get() == 0 then return true end -- no time available
     local utc = rtctime.epoch2cal(rtctime.get())
     local delta = is_daylight_saving(utc) and 7200 or 3600
     local cet = rtctime.epoch2cal(rtctime.get() + delta)
@@ -68,6 +60,7 @@ pending_get = false
 
 function process_http_response(code, data)
     pending_get = false
+    gpio.write(4, 1) -- off once we have feedback
     if code < 0 then
         print("HTTP request failed with internal error: "..code)
         handle_error()
@@ -97,6 +90,7 @@ function main_loop()
         return
     end
     pending_get = true
+    gpio.write(4, 0) -- led on once request scheduled
     http.get(API_URL, nil, process_http_response)
 end
 
@@ -126,9 +120,9 @@ function beep(length)
     end)
 end
 
-configure_output()
 sjson = require "sjson"
 main_timer = tmr.create()
+main_loop()
 -- this time should be more than 10s (10000) which is http timeout
 main_timer:alarm(15000, tmr.ALARM_AUTO, function()
     main_loop()
