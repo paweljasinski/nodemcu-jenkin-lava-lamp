@@ -13,9 +13,9 @@ It is also assumed, there is jenkins server and wifi which allows access to the 
 internet connection to sync clock (it may work with local ntp server).
 
 Wiring:
-D0 - green (low is active)
-D1 - red   (low is active)
-D5 - buzzer (high is active)
+- D0 - green (low is active)
+- D1 - red   (low is active)
+- D5 - buzzer (high is active)
 
 What needs to be configured in config.lue:
 - access point name and key
@@ -30,6 +30,7 @@ What is hardcoded:
 - after 30 failed communication attempts, both lamps will be active
 
 esp8266 has to be flased with nodemcu firmware version 2.1.0.
+
 enabled modules: encoder,file,gpio,http,net,node,rtctime,sjson,sntp,tmr,uart,wifi
 
 What happens on boot:
