@@ -17,6 +17,13 @@ function blink()
     end)
 end
 
+function start()
+    start_timer = tmr.create()
+    start_timer:alarm(3000, tmr.ALARM_SINGLE, function(timer)
+        -- have a chance to nuke init.lua
+        dofile("lava.lua")
+    end)
+end
 
 function setupWifi()
     print("Setting up wifi ")
@@ -26,19 +33,13 @@ function setupWifi()
     station_cfg.pwd = AP_PASSWORD
     wifi.sta.config(station_cfg)
     local verify_timer = tmr.create()
-    verify_timer:alarm(1000, tmr.ALARM_AUTO, function(timer)
+    verify_timer:alarm(3000, tmr.ALARM_AUTO, function(timer)
         if (wifi.sta.getip() == nil) then
             blink()
         else
             print("IP: "..wifi.sta.getip())
             timer:unregister()
-            sntp.sync(nil,
-                function(sec, usec, server, info)
-                    print('sync', sec, usec, server)
-                end,
-                function()
-                    print('time sync failed')
-                end)
+            sntp.sync(nil, start, start)
         end
     end)
 end
@@ -46,4 +47,3 @@ end
 dofile("config.lua")
 configure_output()
 setupWifi()
-dofile("lava.lua")
