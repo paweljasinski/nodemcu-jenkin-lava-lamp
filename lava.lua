@@ -21,6 +21,7 @@ function is_daylight_saving(dtm)
 end
 
 function is_office_time()
+    -- uncomment to debug after hours
     -- do return true end
     if rtctime.get() == 0 then return true end -- no time available
     local utc = rtctime.epoch2cal(rtctime.get())
@@ -117,6 +118,23 @@ function beep(length)
     t = tmr.create()
     t:alarm(length, tmr.ALARM_SINGLE, function()
         gpio.write(5, gpio.LOW)
+    end)
+end
+
+function blinker_on(count)
+    if count == 0 then return end
+    gpio.write(4, 0)
+    one_shot = tmr.create()
+    one_shot:alarm(25, tmr.ALARM_SINGLE, function()
+        blinker_off(count)
+    end)
+end
+
+function blinker_off(count)
+    gpio.write(4, 1)
+    one_shot = tmr.create()
+    one_shot:alarm(100, tmr.ALARM_SINGLE, function()
+        blinker_on(count-1)
     end)
 end
 
