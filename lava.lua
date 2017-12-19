@@ -59,6 +59,10 @@ end
 -- avoid calling get more then once
 pending_get = false
 
+function str_starts_with(str, start)
+   return string.sub(str, 1, string.len(start)) == start
+end
+
 function process_http_response(code, data)
     pending_get = false
     gpio.write(4, 1) -- off once we have feedback
@@ -70,7 +74,8 @@ function process_http_response(code, data)
         result = sjson.decode(data)
         build_color = "green"
         for k, job in pairs(result["jobs"]) do
-            if (job["color"] ~= "blue" and job["color"] ~= "disabled") then
+            -- blue and blue_anime are good colors
+            if (not str_starts_with(job["color"], "blue")) and job["color"] ~= "disabled" then
                 build_color = "red"
                 break
             end
