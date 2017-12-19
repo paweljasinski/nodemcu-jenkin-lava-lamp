@@ -20,6 +20,8 @@ Wiring:
 What needs to be configured in config.lue:
 - access point name and key
 - url of the jenkins view containg projects to be watched
+Note: version 2.1.0 together with 2.98.2 (Jetty 9.4.z-SNAPSHOT) has trouble with
+hostnames (request header is not valid). Entering ip address makes it happy.
 
 What is hardcoded:
 - device is only active during business hours (7am-8pm), timezone is CET
