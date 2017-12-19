@@ -21,7 +21,7 @@ function start()
     start_timer = tmr.create()
     start_timer:alarm(3000, tmr.ALARM_SINGLE, function(timer)
         -- have a chance to nuke init.lua
-        dofile("lava.lua")
+        require "lava"
     end)
 end
 
@@ -44,6 +44,6 @@ function setupWifi()
     end)
 end
 
-dofile("config.lua")
+require "config"
 configure_output()
 setupWifi()
