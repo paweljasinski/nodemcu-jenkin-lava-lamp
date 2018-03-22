@@ -6,7 +6,7 @@ function is_daylight_saving(dtm)
         return true
     end
     local wdayNew
-    if tm["wday"] == 1 then
+    if dtm["wday"] == 1 then
         wdayNew = 7
     else
         wdayNew = dtm["wday"] - 1
